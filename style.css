@@ -1,0 +1,490 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Anek Devanagari", sans-serif;
+    font-size: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+main {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+.nav-container{
+    position: sticky;
+    width: 30%;
+    height: 100%;
+}
+nav {
+    font-size: 2rem;
+    border: 3px solid #ccc;
+    border-radius: 20px;
+    padding: 20px;
+    
+    height: 80vh;
+}
+
+nav ul {
+    margin-top: 20px;
+}
+
+nav ul li {
+    list-style: none;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+.main-section{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 80vh;
+}
+.main-section::-webkit-scrollbar {
+    width: 0;
+}
+.tab.active {
+    padding-left: 10px;
+    background-color: blueviolet;
+    color: white;
+    transition: 0.5s ease-in-out;
+}
+
+.logo, .hamburger {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.other-menu, .hamburger {
+    display: none;
+}
+
+.summary {
+    display: flex;
+    justify-content: space-between;
+    height: fit-content;
+    font-size: 1.2rem;
+    gap: 10px;
+}
+
+.summary-item {
+    display: flex;
+    min-width: 200px;
+    height: 80px;
+    padding: 10px;
+    padding-top: 20px;
+    border-radius: 5px;
+    background-color: #e1dede;
+    overflow: hidden;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.summary-item p {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.summary-item img {
+    width: 50px;
+    height: 50px;
+    opacity: 0.3;
+    animation-name: appear;
+    animation-duration: 1s;
+}
+
+.expense-icon, .item-icon, .net-icon {
+    margin: 0 10px;
+    transform: scale(1.5) rotate(-30deg);
+}
+
+.all-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.all-head h4 {
+    font-weight: 400;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: blueviolet;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: rgb(183, 122, 239);
+}
+
+.add-icon {
+    width: 20px;
+    margin-left: 8px;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+#all-transactions li span, #income-transactions li span, #expense-transactions li span{
+    width: 20%;
+}
+#all-transactions li:hover, #income-transactions li:hover, #expense-transactions li:hover{
+    background-color: #ddd;
+}
+#other-menu {
+    display: none;
+    background-color: white;
+    list-style: none;
+}
+
+.transaction-form {
+    display: none;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.transaction-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.transaction-form input,
+.transaction-form select,
+.transaction-form button {
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.transaction-form button {
+    background-color: #e3a4f4;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.transaction-form button:hover {
+    background-color: #71178a;
+}
+
+.transaction-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.transaction-list li {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 10px;
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    /* overflow-x: scroll; */
+}
+.fixed{
+    min-width: 30px;
+    flex-wrap: wrap;
+}
+.transaction-list li span {
+    font-size: 1.5rem;
+    margin-right: 20px;
+
+}
+
+.transaction-list button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 1rem;
+}
+
+.transaction-list button:hover {
+    background-color: #c82333;
+}
+
+/* #income-amount{
+    color: chartreuse;
+} */
+#category-filter, #income-filter, #expense-filter{
+    width: 50%;
+    height: 30px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    -webkit-appearance: none;
+}
+#expense-filter{
+    width: 49%;
+}
+  
+#expense-amount{
+    color: red;
+}
+.chart-container{
+    margin-top: 20px;
+}
+.the-charts {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+.chart {
+    text-align: center;
+    width: 40%;
+}
+.chart h5{
+    margin-top: 10px;
+}
+@keyframes appear {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 1.5rem;
+    }
+
+    .logo, .hamburger {
+        font-size: 2rem;
+    }
+
+    main {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    nav {
+        font-size: 0.875rem;
+        height: auto;
+        padding: 10px;
+        width: 100%;
+    }
+
+    .summary {
+        flex-direction: column;
+        margin: 0 auto;
+        font-size: 1.5rem;
+        width: 100%;
+    }
+
+    .summary-item {
+        min-width: 100%;
+        height: auto;
+        padding: 10px;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .hamburger > ul {
+        display: none;
+        position: absolute;
+        right: 20px;
+        top: 70px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    nav {
+        display: none;
+        flex-direction: column;
+    }
+
+    nav ul.active {
+        display: flex;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    .main-section {
+        width: 100%;
+    }
+
+    #other-menu {
+        /* display: block; */
+        position: absolute;
+        right: 20px;
+        top: 60px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    #all-transactions,
+    #income-transactions,
+    #expense-transactions {
+        font-size: .75rem;
+    }
+    .transaction-list li span{
+        /* flex-direction: column; */
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        font-size: 1.5rem;
+    }
+
+    .logo, .hamburger {
+        font-size: 1.5rem;
+    }
+
+    .header {
+        padding: 10px;
+    }
+
+    main {
+        padding: 5px;
+    }
+
+    .summary {
+        font-size: 1.25rem;
+    }
+
+    .summary-item {
+        width: 100%;
+    }
+
+    .hamburger {
+        display: block;
+        margin: 10px;
+    }
+
+    nav ul.active {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    .transaction-form form {
+        flex-direction: column;
+    }
+
+    .transaction-form input,
+    .transaction-form select,
+    .transaction-form button {
+        flex: 1 0 auto;
+    }
+
+    .transaction-form button {
+        flex: 1 0 auto;
+    }
+
+    #all-transactions,
+    #income-transactions,
+    #expense-transactions {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 1.3rem;
+    }
+
+    .logo {
+        font-size: 1.75rem;
+    }
+
+    .header {
+        padding: 10px;
+    }
+
+    main {
+        margin: 10px;
+        padding: 5px;
+    }
+
+    .summary {
+        font-size: 1.3rem;
+    }
+
+    .summary-item {
+        width: 100%;
+    }
+
+    .hamburger {
+        display: block;
+        margin: 10px;
+    }
+
+    nav ul.active {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    #all-transactions,
+    #income-transactions,
+    #expense-transactions {
+        font-size: 0.625rem;
+    }
+
+    .transaction-list li button {
+        height: fit-content;
+    }
+    .transaction-list button{
+        font-size: smaller;
+        padding: 0;
+        padding: 5px 4px;
+    }
+
+    .all-transactions .all-head div h10, .expenses .all-head div h10, .income .all-head div h10{
+        display: none;
+    }
+    .expenses .all-head div select{
+        margin-right: 60px;
+        /* margin: 0; */
+    }
+    .all-transactions .all-head div select{
+        /* width: 100px; */
+        margin-right: -30px;
+    }
+    .income .all-head div select{
+        margin-right: 15px;
+    }
+
+}
