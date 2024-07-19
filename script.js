@@ -264,3 +264,64 @@ function filterExpense(){
         }
     });
 }
+// Changing the sections
+function showSection(sectionId, tabId) {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => section.style.display = 'none');
+
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+
+    document.getElementById(sectionId).style.display = 'block';
+
+    const activeTabs = document.querySelectorAll(`#${tabId}`);
+    activeTabs.forEach(tab => tab.classList.add('active'));
+}
+document.addEventListener('DOMContentLoaded', () => {
+    showSection('section1', 'tab1');
+});
+
+document.getElementById('hamburger').addEventListener('click', function() {
+    const otherMenu = document.getElementById('other-menu');
+    otherMenu.style.display = otherMenu.style.display === 'none' || otherMenu.style.display === '' ? 'block' : 'none';
+});
+
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('other-menu');
+    const userIcon = document.getElementById('hamburger');
+    if (!menu.contains(event.target) && !userIcon.contains(event.target)) {
+        menu.style.display = 'none';
+    }
+});
+
+// Deleting a transaction
+let deleteButtonPositions = [];
+
+function prepareForExport() {
+    const deleteButtons = document.querySelectorAll('#delete-button');
+    deleteButtons.forEach(button => {
+        deleteButtonPositions.push({ parent: button.parentNode, button });
+        button.remove();
+    });
+}
+
+function restoreAfterExport() {
+    deleteButtonPositions.forEach(({ parent, button }) => {
+        parent.appendChild(button);
+    });
+    deleteButtonPositions = []; 
+}
+
+// Printing the data
+function exportAsPDF() {
+    const printHeading = document.getElementById('print-heading');
+    const transHeading = document.getElementById('transaction-heading');
+    console.log('The heading is there, ig',printHeading.textContent);
+    printHeading.style.display = 'block';
+    transHeading.style.display = 'block';
+    window.print();
+    printHeading.style.display = 'none';
+    transHeading.style.display = 'none';
+}
+
+document.getElementById('export-btn').addEventListener('click', exportAsPDF);
