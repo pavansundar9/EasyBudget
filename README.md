@@ -55,7 +55,6 @@ To use the Expense Tracker, follow these steps:
 
 ## Dependencies:
 - **FontAwesome:** Used for icons in the application interface.
-- **html2pdf.js:** Library for generating PDF documents from HTML content.
 - **Chart.js:** Library for creating interactive charts, used for visualizing income and expenses.
 
 ## Contributing:
