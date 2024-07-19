@@ -4,7 +4,8 @@
 EasyBudget is an Expense Tracking web application designed to help users manage their expenses and income effectively. It provides features for adding, categorizing, and tracking transactions and visual representations of income and expenditures through pie charts.
 
 ## Preview & live
-![easybudget](https://github.com/user-attachments/assets/66799b42-1005-480d-8b43-186a5ed6a3fa)
+![pixelcut-export (3)](https://github.com/user-attachments/assets/e870ce2c-59c0-4dee-9e97-c6c7bf3130b6)
+
 
 The application is device-responsive and ensures a seamless user experience across different devices, including desktops, tablets, and mobile phones. With EasyBudget, users can:
 
