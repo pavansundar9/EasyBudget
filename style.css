@@ -85,6 +85,7 @@ nav ul li {
     padding-top: 20px;
     border-radius: 5px;
     background-color: #e1dede;
+    border: 1px solid #e1dede;
     overflow: hidden;
     align-items: center;
     justify-content: space-between;
@@ -488,3 +489,35 @@ button:hover {
     }
 
 }
+/* Print-only styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #all-transactions,#all-transactions *, #summary, #summary *, #print-heading, #transaction-heading {
+        visibility: visible;
+    }
+    #all-transactions, #summary, #transaction-heading {
+        position: absolute;
+        left: 0;
+        top: 50px;
+        width: 100%;
+    }
+    #transaction-heading{
+        visibility: visible;
+        top: 300px;
+    }
+    #all-transactions{
+        top: 350px;
+    }
+    #print-heading {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+    }
+}
+  
