@@ -17,7 +17,7 @@ The application is device-responsive and ensures a seamless user experience acro
 
 EasyBudget aims to make personal finance management simple and intuitive, helping users take control of their financial health.
 
-Check out the live [here](https://[link](https://pavansundar9.github.io/EasyBudget/))
+Check out the live [here](https://pavansundar9.github.io/EasyBudget/)
 
 ## Features:
 1. **Transaction Management:** Users can add, categorize, and track their income and expenses.
