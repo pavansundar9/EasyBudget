@@ -15,6 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalExpensesEl = document.getElementById('total-expenses');
     const netIncomeEl = document.getElementById('net-income');
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString); 
+        const day = String(date.getDate()).padStart(2, '0'); 
+        const month = String(date.getMonth() + 1).padStart(2, '0'); 
+        const year = String(date.getFullYear()).slice(-2); 
+
+        return `${day}-${month}-${year}`; 
+    }; 
+
     // const addIncomeBtn = document.getElementById('add-income');
     // const addExpenseBtn = document.getElementById('add-expense');
 
@@ -38,8 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
         transactions.forEach((transaction, index) => {
             const li = document.createElement('li');
             li.classList.add('transaction-item'); // Add a class to each transaction list item
+            const formattedDate = formatDate(transaction.date); 
             li.innerHTML = `
-                <span class='fixed'>${transaction.date}</span>
+                <span class='fixed'>${formattedDate}</span>
                 <span class='fixed'>${transaction.description}</span>
                 <span class='fixed'>${transaction.category}</span>
                 <span class='fixed income'>${transaction.type === 'income' ? '+' : '-'}₹${transaction.amount}</span>
@@ -57,6 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const addTransaction = (transaction) => {
         transactions.push(transaction);
+        // Sort transactions by date in descending order (most recent first)
+        transactions.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
         localStorage.setItem('transactions', JSON.stringify(transactions));
         renderTransactions();
         updateSummary();
