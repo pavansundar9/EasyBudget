@@ -170,8 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const expenseLabels = Object.keys(expenseCategories);
         const expenseData = Object.values(expenseCategories);
 
-        console.log('Income Categories:', incomeCategories);
-        console.log('Expense Categories:', expenseCategories);
+        //console.log('Income Categories:', incomeCategories);
+        //console.log('Expense Categories:', expenseCategories);
 
         // Default data for empty charts
         const emptyData = [1];
@@ -328,7 +328,7 @@ function restoreAfterExport() {
 function exportAsPDF() {
     const printHeading = document.getElementById('print-heading');
     const transHeading = document.getElementById('transaction-heading');
-    console.log('The heading is there, ig',printHeading.textContent);
+    //console.log('The heading is there, ig',printHeading.textContent);
     printHeading.style.display = 'block';
     transHeading.style.display = 'block';
     window.print();
