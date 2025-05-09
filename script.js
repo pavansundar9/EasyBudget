@@ -63,6 +63,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 expenseList.appendChild(li.cloneNode(true));
             }
         });
+
+        console.log("incomelist size", incomeList.children.length);
+        if (incomeList.children.length === 0) {
+            const emptyMessage = document.createElement('p');
+            emptyMessage.textContent = 'No income transactions available.';
+            emptyMessage.classList.add('empty-message');
+            incomeList.appendChild(emptyMessage);
+        }
+        console.log("expenselist size", expenseList.children.length);
+        if (expenseList.children.length === 0) {
+            const emptyMessage = document.createElement('p');
+            emptyMessage.textContent = 'No expense transactions available.';
+            emptyMessage.classList.add('empty-message');
+            expenseList.appendChild(emptyMessage);
+        }
     };
     
     const addTransaction = (transaction) => {
@@ -305,6 +320,16 @@ document.addEventListener('click', function(event) {
         menu.style.display = 'none';
     }
 });
+
+function toggleEmptyMessage(list, messageId) {
+    const messageEl = document.getElementById(messageId);
+    if (list.children.length === 0 || 
+        (list.children.length === 1 && list.children[0].id === messageId)) {
+        messageEl.style.display = 'block';
+    } else {
+        messageEl.style.display = 'none';
+    }
+}
 
 // Deleting a transaction
 let deleteButtonPositions = [];

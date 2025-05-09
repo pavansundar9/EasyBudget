@@ -78,13 +78,15 @@
                                 <option value="Government Benefits">Government Benefits</option>
                                 <option value="Royalties">Royalties</option>
                                 <option value="Other Income">Other Income</option>
-                                <option value="Food & drinks">Food & drinks</option>
-                                <option value="Groceries & Shopping">Groceries & Shopping</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Loans">Loans</option>
-                                <option value="Rent / Bills">Rent / Bills</option>
+                                <option value="Food & Dining">Food & Dining</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Housing & Utilities">Housing & Utilities</option>
+                                <option value="Health & Wellness">Health & Wellness</option>
+                                <option value="Entertainment & Leisure">Entertainment & Leisure</option>
                                 <option value="Education">Education</option>
-                                <option value="Personal Care">Personal Care</option>
+                                <option value="Shopping & Personal Care">Shopping & Personal Care</option>
+                                <option value="Travel">Travel</option>
+                                <option value="Miscellaneous">Miscellaneous</option>
                             </select>
                         </div>
                     </div>
@@ -157,7 +159,7 @@
                                 <option value="Personal Care">Personal Care</option>
                             </select>
                         </div>
-                        <button title="add-transac" id="add-expense">Add Transaction&nbsp;&nbsp;<i class="fa-thin fa-square-plus" style="font-size: 20px;"></i></button>
+                        <button title="add-transac" id="add-expense">Add Transaction &nbsp;&nbsp;<i class="fa-thin fa-square-plus" style="font-size: 20px;"></i></button>
                     </div>
                     <div class="transaction-form expense-form" style="display: none;">
                         <h2>Add Transaction</h2>
@@ -165,15 +167,17 @@
                             <input type="date" title="expense-date" id="expense-date" required>
                             <input type="text" id="expense-description" placeholder="Description" required>
                             <select id="expense-category" name="expense-category" title="expense-category" required>
-                                <option>--Select Category--</option>
-                                <option value="Food & drinks">Food & drinks</option>
-                                <option value="Groceries & Shopping">Groceries & Shopping</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Loans">Loans</option>
-                                <option value="Rent / Bills">Rent / Bills</option>
+                                <option value="" disabled selected>--Select Category--</option>
+                                <option value="Food & Dining">Food & Dining</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Housing & Utilities">Housing & Utilities</option>
+                                <option value="Health & Wellness">Health & Wellness</option>
+                                <option value="Entertainment & Leisure">Entertainment & Leisure</option>
                                 <option value="Education">Education</option>
-                                <option value="Personal Care">Personal Care</option>
-                            </select>
+                                <option value="Shopping & Personal Care">Shopping & Personal Care</option>
+                                <option value="Travel">Travel</option>
+                                <option value="Miscellaneous">Miscellaneous</option>
+                            </select>                            
                             <input type="number" id="expense-amount" placeholder="Amount" required>
                             <select id="expense-type" name="expense-type" title="expense-type" required>
                                 <option value="expense">Expense</option>

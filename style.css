@@ -180,14 +180,9 @@ button:hover {
 }
 
 .transaction-form button {
-    background-color: #e3a4f4;
     color: #fff;
     border: none;
     cursor: pointer;
-}
-
-.transaction-form button:hover {
-    background-color: #71178a;
 }
 
 .transaction-list ul {
@@ -263,6 +258,18 @@ button:hover {
 .chart h5{
     margin-top: 10px;
 }
+
+.empty-message {
+    text-align: center;
+    color: gray;
+    margin-top: 10px;
+    font-style: italic;
+    font-size: 1.5rem;
+    animation: appear 1s ease-in-out;
+    animation-fill-mode: forwards;
+    margin-top: 100px;
+}
+
 @keyframes appear {
     0% {
         transform: scale(0);
