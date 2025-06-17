@@ -192,6 +192,22 @@
             </div>
         </section>
     </main>
+    <!-- Add these before your script.js -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7du6OxAUe-to2tY4KwCs6gGp1K0OXSMI",
+            authDomain: "easybudget-e7eb1.firebaseapp.com",
+            projectId: "easybudget-e7eb1",
+            storageBucket: "easybudget-e7eb1.firebasestorage.app",
+            messagingSenderId: "914873844526",
+            appId: "1:914873844526:web:f89ebe4cd2df5bf377b0bf"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
 </body>
 </html>

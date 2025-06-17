@@ -1,3 +1,5 @@
+// const db = getFirestore();
+
 document.addEventListener('DOMContentLoaded', () => {
     const incomeForm = document.getElementById('income-form');
     const incomeList = document.getElementById('income-transactions');
@@ -16,22 +18,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const netIncomeEl = document.getElementById('net-income');
 
     const formatDate = (dateString) => {
-        const date = new Date(dateString); 
-        const day = String(date.getDate()).padStart(2, '0'); 
-        const month = String(date.getMonth() + 1).padStart(2, '0'); 
-        const year = String(date.getFullYear()).slice(-2); 
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(-2);
 
-        return `${day}-${month}-${year}`; 
-    }; 
+        return `${day}-${month}-${year}`;
+    };
 
-    // const addIncomeBtn = document.getElementById('add-income');
-    // const addExpenseBtn = document.getElementById('add-expense');
+    let transactions = [];
 
-    let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+    // Remove the old fetchTransactions function as we'll use real-time updates
 
-    const updateSummary = () => {
-        const income = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + parseFloat(t.amount), 0);
-        const expenses = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + parseFloat(t.amount), 0);
+    function listenToTransactions() {
+        db.collection("transactions").onSnapshot((snapshot) => {
+            transactions = []; // Clear the array
+            snapshot.forEach((doc) => {
+                transactions.push({ id: doc.id, ...doc.data() });
+            });
+            renderTransactions(transactions); // Pass transactions to render function
+            updateSummary(transactions);
+            updateCharts(transactions);
+        });
+    }
+
+    // Call this once on page load
+    listenToTransactions();
+
+    const updateSummary = (transactionList = transactions) => {
+        const income = transactionList.filter(t => t.type === 'income').reduce((acc, t) => acc + parseFloat(t.amount), 0);
+        const expenses = transactionList.filter(t => t.type === 'expense').reduce((acc, t) => acc + parseFloat(t.amount), 0);
         const netIncome = income - expenses;
 
         totalIncomeEl.textContent = income.toFixed(2);
@@ -39,24 +55,31 @@ document.addEventListener('DOMContentLoaded', () => {
         netIncomeEl.textContent = netIncome.toFixed(2);
     };
 
-    const renderTransactions = () => {
+    const renderTransactions = (transactionList = transactions) => {
         incomeList.innerHTML = '';
         expenseList.innerHTML = '';
         allList.innerHTML = '';
-    
-        transactions.forEach((transaction, index) => {
+
+        // Sort transactions by date (newest first)
+        const sortedTransactions = [...transactionList].sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateB - dateA; // Newest first (descending order)
+        });
+
+        sortedTransactions.forEach((transaction, index) => {
             const li = document.createElement('li');
-            li.classList.add('transaction-item'); // Add a class to each transaction list item
-            const formattedDate = formatDate(transaction.date); 
+            li.classList.add('transaction-item');
+            const formattedDate = formatDate(transaction.date);
             li.innerHTML = `
                 <span class='fixed'>${formattedDate}</span>
                 <span class='fixed'>${transaction.description}</span>
                 <span class='fixed'>${transaction.category}</span>
-                <span class='fixed income'>${transaction.type === 'income' ? '+' : '-'}₹${transaction.amount}</span>
-                <button class='fixed' id='delete-button' onclick="deleteTransaction(${index})">Delete</button>
+                <span class='fixed ${transaction.type === 'income' ? 'green' : 'red'} income'>${transaction.type === 'income' ? '+' : '-'}₹${transaction.amount}</span>
+                <button class='fixed' id='delete-button' onclick="deleteTransaction('${transaction.id}')">Delete</button>
             `;
             allList.appendChild(li);
-            
+
             if (transaction.type === 'income') {
                 incomeList.appendChild(li.cloneNode(true));
             } else {
@@ -79,22 +102,23 @@ document.addEventListener('DOMContentLoaded', () => {
             expenseList.appendChild(emptyMessage);
         }
     };
-    
-    const addTransaction = (transaction) => {
-        transactions.push(transaction);
-        // Sort transactions by date in descending order (most recent first)
-        transactions.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-        localStorage.setItem('transactions', JSON.stringify(transactions));
-        renderTransactions();
-        updateSummary();
-        updateCharts();
+
+    const addTransaction = async (transaction) => {
+        try {
+            await db.collection("transactions").add(transaction);
+            // No need to call fetchTransactions or any manual updates
+            // The onSnapshot listener will automatically update the UI
+        } catch (error) {
+            console.error("Error adding transaction:", error);
+            alert("Error adding transaction. Please try again.");
+        }
     };
 
     addIncomeBtn.addEventListener('click', () => {
         incomeFormDiv.style.display = 'block';
     });
 
-    incomeForm.addEventListener('submit', (event) => {
+    incomeForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const date = incomeForm.querySelector('#income-date').value;
@@ -109,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const transaction = { date, description, category, amount, type };
-        addTransaction(transaction);
+        await addTransaction(transaction);
 
         incomeForm.reset();
         incomeFormDiv.style.display = 'none';
@@ -119,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expenseFormDiv.style.display = 'block';
     });
 
-    expenseForm.addEventListener('submit', (event) => {
+    expenseForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const date = expenseForm.querySelector('#expense-date').value;
@@ -134,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const transaction = { date, description, category, amount, type };
-        addTransaction(transaction);
+        await addTransaction(transaction);
 
         expenseForm.reset();
         expenseFormDiv.style.display = 'none';
@@ -150,20 +174,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    window.deleteTransaction = (index) => {
-        transactions.splice(index, 1);
-        localStorage.setItem('transactions', JSON.stringify(transactions));
-        renderTransactions();
-        updateSummary();
-        updateCharts();
+    window.deleteTransaction = async (id) => {
+        try {
+            await deleteDoc(doc(db, "transactions", id));
+            // No need to call fetchTransactions - onSnapshot will handle the update
+        } catch (error) {
+            console.error("Error deleting transaction:", error);
+            alert("Error deleting transaction. Please try again.");
+        }
     };
-    
+
     // Function to update the charts
-    const updateCharts = () => {
+    const updateCharts = (transactionList = transactions) => {
         const incomeCategories = {};
         const expenseCategories = {};
 
-        transactions.forEach(transaction => {
+        transactionList.forEach(transaction => {
             const category = transaction.category;
             const amount = parseFloat(transaction.amount);
 
@@ -184,9 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const incomeData = Object.values(incomeCategories);
         const expenseLabels = Object.keys(expenseCategories);
         const expenseData = Object.values(expenseCategories);
-
-        //console.log('Income Categories:', incomeCategories);
-        //console.log('Expense Categories:', expenseCategories);
 
         // Default data for empty charts
         const emptyData = [1];
@@ -248,14 +271,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     updateButtonText();
-    renderTransactions();
-    updateSummary();
-    updateCharts(); 
+    // Remove the initial fetchTransactions call since listenToTransactions handles it
+    // fetchTransactions();
+    // updateSummary();
+    // updateCharts();
 });
+
 function filterTransactions() {
     const category = document.getElementById('category-filter').value;
     const allTransactions = document.querySelectorAll('.transaction-list .transaction-item');
-    
+
     allTransactions.forEach(transaction => {
         const transactionCategory = transaction.children[2].textContent;
         if (category === '' || transactionCategory === category) {
@@ -265,10 +290,11 @@ function filterTransactions() {
         }
     });
 }
-function filterIncome(){
+
+function filterIncome() {
     const category = document.getElementById('income-filter').value;
     const allTransactions = document.querySelectorAll('.transaction-list .transaction-item');
-    
+
     allTransactions.forEach(transaction => {
         const transactionCategory = transaction.children[2].textContent;
         if (category === '' || transactionCategory === category) {
@@ -278,10 +304,11 @@ function filterIncome(){
         }
     });
 }
-function filterExpense(){
+
+function filterExpense() {
     const category = document.getElementById('expense-filter').value;
     const allTransactions = document.querySelectorAll('.transaction-list .transaction-item');
-    
+
     allTransactions.forEach(transaction => {
         const transactionCategory = transaction.children[2].textContent;
         if (category === '' || transactionCategory === category) {
@@ -291,6 +318,7 @@ function filterExpense(){
         }
     });
 }
+
 // Changing the sections
 function showSection(sectionId, tabId) {
     const sections = document.querySelectorAll('.section');
@@ -304,16 +332,17 @@ function showSection(sectionId, tabId) {
     const activeTabs = document.querySelectorAll(`#${tabId}`);
     activeTabs.forEach(tab => tab.classList.add('active'));
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     showSection('section1', 'tab1');
 });
 
-document.getElementById('hamburger').addEventListener('click', function() {
+document.getElementById('hamburger').addEventListener('click', function () {
     const otherMenu = document.getElementById('other-menu');
     otherMenu.style.display = otherMenu.style.display === 'none' || otherMenu.style.display === '' ? 'block' : 'none';
 });
 
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
     const menu = document.getElementById('other-menu');
     const userIcon = document.getElementById('hamburger');
     if (!menu.contains(event.target) && !userIcon.contains(event.target)) {
@@ -323,7 +352,7 @@ document.addEventListener('click', function(event) {
 
 function toggleEmptyMessage(list, messageId) {
     const messageEl = document.getElementById(messageId);
-    if (list.children.length === 0 || 
+    if (list.children.length === 0 ||
         (list.children.length === 1 && list.children[0].id === messageId)) {
         messageEl.style.display = 'block';
     } else {
@@ -346,14 +375,13 @@ function restoreAfterExport() {
     deleteButtonPositions.forEach(({ parent, button }) => {
         parent.appendChild(button);
     });
-    deleteButtonPositions = []; 
+    deleteButtonPositions = [];
 }
 
 // Printing the data
 function exportAsPDF() {
     const printHeading = document.getElementById('print-heading');
     const transHeading = document.getElementById('transaction-heading');
-    //console.log('The heading is there, ig',printHeading.textContent);
     printHeading.style.display = 'block';
     transHeading.style.display = 'block';
     window.print();
@@ -362,3 +390,6 @@ function exportAsPDF() {
 }
 
 document.getElementById('export-btn').addEventListener('click', exportAsPDF);
+
+// Remove the duplicate DOMContentLoaded listener for listenToTransactions
+// as it's already called in the main DOMContentLoaded event listener

@@ -239,9 +239,14 @@ button:hover {
     width: 49%;
 }
   
-#expense-amount{
+.red{
     color: red;
 }
+
+.green{
+    color: green;
+}
+
 .chart-container{
     margin-top: 20px;
 }
